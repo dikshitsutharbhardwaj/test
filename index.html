@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Happy Birthday Spoon ki Maalkin 💖</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html, body { height: 100%; }
+
+    body {
+      font-family: "Poppins", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      color: #fff;
+      overflow: hidden;
+      transition: background 0.6s ease;
+    }
+
+    body[data-page="page1"] {
+      background: radial-gradient(circle at top, #ffe5f1, #ffb6d9, #ff9fc9);
+    }
+    body[data-page="page2"] {
+      background: radial-gradient(circle at top, #ff9aa2, #ff6f91, #b5179e);
+    }
+    body[data-page="page3"] {
+      background: radial-gradient(circle at top, #ffcad4, #ffb3c6, #ff8fab);
+    }
+    body[data-page="page4"] {
+      background: radial-gradient(circle at top, #1b1025, #2b143a, #3b1f4f);
+    }
+
+    .page {
+      position: absolute;
+      inset: 0;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      text-align: center;
+    }
+    .page.active { display: flex; }
+
+    .content { max-width: 900px; margin: auto; }
+
+    .small-title {
+      font-size: 0.9rem;
+      opacity: 0.9;
+      margin-bottom: 5px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .main-title {
+      font-size: 2.2rem;
+      margin-bottom: 15px;
+    }
+
+    .main-title span {
+      font-weight: 700;
+    }
+
+    .heart-button {
+      padding: 18px 35px;
+      border-radius: 50px;
+      background: linear-gradient(45deg, #ffdde7, #ff4b91);
+      border: none;
+      cursor: pointer;
+      font-size: 1rem;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      color: #fff;
+      box-shadow: 0 12px 26px rgba(0,0,0,0.25);
+    }
+
+    .heart-emoji {
+      font-size: 2.3rem;
+      animation: pulseGlow 1.1s infinite;
+    }
+
+    @keyframes pulseGlow {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.2); }
+      100% { transform: scale(1); }
+    }
+
+    .hint {
+      margin-top: 15px;
+      font-size: 0.9rem;
+      opacity: 0.9;
+    }
+
+    .floating-orb {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(40px);
+      opacity: 0.7;
+      animation: orbit 18s linear infinite;
+      z-index: -1;
+    }
+    .floating-orb:nth-child(1) { width: 180px; height: 180px; background:#ffe5f1; top:10%; left:10%; }
+    .floating-orb:nth-child(2) { width: 230px; height:230px; background:#ffb6d9; bottom:5%; right:5%; animation-delay: -5s; }
+
+    @keyframes orbit {
+      0% { transform: translate(0,0); }
+      50% { transform: translate(20px,-20px); }
+      100% { transform: translate(0,0); }
+    }
+
+    .hb-main {
+      font-size: 2.6rem;
+      margin-bottom: 10px;
+      line-height: 1.3;
+    }
+
+    .hb-main span {
+      color: #ffe66d;
+      text-shadow: 0 0 10px rgba(255,230,100,0.8);
+    }
+
+    .heartbeat-heart {
+      font-size: 3.5rem;
+      animation: beat 1s infinite;
+      margin-bottom: 10px;
+    }
+
+    @keyframes beat {
+      0% { transform: scale(1); }
+      25% { transform: scale(1.25); }
+      50% { transform: scale(1.1); }
+      100% { transform: scale(1); }
+    }
+
+    .bg-heart {
+      position: fixed;
+      font-size: 22px;
+      bottom: 0;
+      animation: rise 4s linear forwards;
+      pointer-events: none;
+      opacity: 0.9;
+    }
+
+    @keyframes rise {
+      0% { transform: translateY(0) translateX(0); opacity:1; }
+      100% { transform: translateY(-150px) translateX(40px); opacity:0; }
+    }
+
+    
+    .section-title {
+      font-size: 1.4rem;
+      margin-bottom: 16px;
+    }
+
+    .photo-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 14px;
+      margin-bottom: 20px;
+    }
+
+    .photo-frame {
+      position: relative;
+      padding: 8px;
+      border-radius: 18px;
+      background: rgba(255,255,255,0.18);
+      border: 2px solid rgba(255,255,255,0.75);
+      opacity: 0;
+      transform: translateY(18px) scale(0.96);
+      filter: blur(4px);
+      box-shadow: 0 12px 24px rgba(0,0,0,0.2);
+      transition: opacity 0.45s ease, transform 0.45s ease, filter 0.45s ease;
+    }
+
+    .photo-frame::before {
+      content: "";
+      position: absolute;
+      inset: 6px;
+      border-radius: 14px;
+      border: 1px dashed rgba(255,255,255,0.85);
+      pointer-events: none;
+    }
+
+    .photo-frame.visible {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+      filter: blur(0);
+    }
+
+    .photo-frame img {
+      width: 100%;
+      height: 200px;           
+      object-fit: cover;
+      border-radius: 12px;
+      display: block;
+    }
+
+    @media (max-width: 600px) {
+      .photo-frame img {
+        height: 220px;       
+      }
+    }
+
+    .next-btn {
+      padding:10px 25px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,0.7);
+      background: rgba(0,0,0,0.25);
+      backdrop-filter: blur(8px);
+      color:white;
+      cursor:pointer;
+      font-size:0.9rem;
+      box-shadow: 0 10px 22px rgba(0,0,0,0.25);
+    }
+
+    .next-btn:hover {
+      background: rgba(0,0,0,0.35);
+      transform: translateY(-1px);
+    }
+
+  
+    .letter-box {
+      background: rgba(255,255,255,0.08);
+      padding: 18px;
+      border-radius: 16px;
+      min-height: 180px;
+      border:1px solid rgba(255,255,255,0.35);
+      text-align: left;
+      white-space: pre-wrap;
+      box-shadow: 0 16px 32px rgba(0,0,0,0.4);
+    }
+
+    .music-btn {
+      margin-top: 15px;
+      padding:8px 22px;
+      border-radius:50px;
+      border:1px solid rgba(255,255,255,0.6);
+      background: rgba(255,255,255,0.15);
+      cursor:pointer;
+      color:white;
+      box-shadow: 0 10px 22px rgba(0,0,0,0.35);
+    }
+
+  </style>
+</head>
+<body data-page="page1">
+
+  <div class="floating-orb"></div>
+  <div class="floating-orb"></div>
+
+  <!-- PAGE 1 -->
+  <section id="page1" class="page active">
+    <div class="content">
+      <div class="small-title">A sweet surprise ✨</div>
+      <h1 class="main-title">Ready for your <span>Birthday Surprise?</span></h1>
+
+      <button id="startBtn" class="heart-button">
+        <span class="heart-emoji">❤️</span>
+        Press your spoon button
+      </button>
+
+      <p class="hint">Tap this cute heart… and magic begins ✨</p>
+    </div>
+  </section>
+
+  <!-- PAGE 2 -->
+  <section id="page2" class="page">
+    <div class="content">
+      <h1 class="hb-main">
+        Happy Birthday<br>
+        <span>Mere Spoon ki Maalkin</span>
+      </h1>
+
+      <div class="heartbeat-heart">❤️</div>
+
+      <p class="sub-text">
+        Aapke aane se meri life beautiful ho gai hai ✨
+      </p>
+    </div>
+  </section>
+
+  <!-- PAGE 3 -->
+  <section id="page3" class="page">
+    <div class="content">
+      <h2 class="section-title">Hamari Thodi Si Pyari Yaadein 📸</h2>
+
+      <div id="photoGrid" class="photo-grid">
+        
+        <div class="photo-frame"><img src="IMG-20251126-WA0011.jpg" alt="Memory 1"></div>
+        <div class="photo-frame"><img src="IMG-20251126-WA0010.jpg" alt="Memory 2"></div>
+        <div class="photo-frame"><img src="IMG-20251126-WA0013.jpg" alt="Memory 3"></div>
+        <div class="photo-frame"><img src="IMG-20251126-WA0009.jpg" alt="Memory 4"></div>
+        <div class="photo-frame"><img src="IMG-20251126-WA0012.jpg" alt="Memory 5"></div>
+        <div class="photo-frame"><img src="IMG-20251126-WA0008.jpg" alt="Memory 6"></div>
+      </div>
+
+      <button id="toPage4" class="next-btn">or bhi aage ✨ ➜</button>
+    </div>
+  </section>
+
+  <!-- PAGE 4 -->
+  <section id="page4" class="page">
+    <div class="content">
+      <h2 class="section-title">Letter for Spoon ki Maalkin 💌</h2>
+
+      <div class="letter-box" contenteditable="true">
+Meri Pyari Spoon ki Maalkin,
+  
+mere pyare loving kurkura i love you so much ❤️ me aapse bohot pyar karta hu or karta hu rahuga long distance kabhi ye matter nhi karta ki pyar kam h jaye 💖
+shayad ye thoda faltu ka surprise he but abhi me esa kuch nhi kar sakta tha aapko dikkt ho usko chupane me mere taraf se choda sa he 
+aap mere liye perfect ho shayd me nhi 😔 ho kyu ki rulata hu aapko pure time aaj bhi rulaya 🥺 tha but pyar aapse sabse jiyda karuga aapko sorry bhi bona chata hu
+har baar gussa kar deta hu bina aapko samje aap mere life me ek mast part ho jo me baar baar jina chata hu aap mere sath puri life raho bhagawan aapni ek icha puri karege
+me aapke liye bhi bohot karra hu ki aapna ho jaye sab tune meri life khushi se bhardi he aapn sath hote he to time ka pata hi nhi chalta he bohot sari baate he din me batane se sab khatam nhi hoti he 
+
+Tum meri life ka best part ho —  
+aur mera favourite reason smile karne ka
+humesa haste rahna aap bohot mast lagte ho .
+
+I love you bohot sara, hamesha.  
+— Your kurkura ❤️
+      </div>
+
+      <button id="musicToggle" class="music-btn">🎵 Play Song (Arijit vibes)</button>
+      <audio id="bgMusic" src="song.mp3" loop></audio>
+    </div>
+  </section>
+
+<script>
+let currentPage = 1;
+let heartInterval = null;
+let page2Timeout = null;
+
+function showPage(p) {
+  document.querySelectorAll(".page").forEach(pg => pg.classList.remove("active"));
+  document.getElementById("page" + p).classList.add("active");
+  document.body.setAttribute("data-page", "page" + p);
+  currentPage = p;
+
+  if (p !== 2) {
+    if (heartInterval) clearInterval(heartInterval);
+    if (page2Timeout) clearTimeout(page2Timeout);
+    document.querySelectorAll(".bg-heart").forEach(h => h.remove());
+  }
+
+  if (p === 2) startPage2();
+  if (p === 3) startPhotoAnimation();
+}
+
+function startPage2() {
+  heartInterval = setInterval(spawnHeart, 250);
+
+  page2Timeout = setTimeout(() => {
+    showPage(3);
+  }, 10000); 
+}
+
+function spawnHeart() {
+  let h = document.createElement("div");
+  h.className = "bg-heart";
+  h.textContent = "💗";
+  let x = Math.random() * window.innerWidth;
+  h.style.left = x + "px";
+  document.body.appendChild(h);
+  setTimeout(() => h.remove(), 4000);
+}
+
+function startPhotoAnimation() {
+  let frames = document.querySelectorAll(".photo-frame");
+  frames.forEach(f => f.classList.remove("visible"));
+  let i = 0;
+  function next() {
+    if (i < frames.length) {
+      frames[i].classList.add("visible");
+      i++;
+      setTimeout(next, 420);
+    }
+  }
+  next();
+}
+
+window.onload = () => {
+  document.getElementById("startBtn").onclick = () => showPage(2);
+  document.getElementById("toPage4").onclick = () => showPage(4);
+
+  const music = document.getElementById("bgMusic");
+  const btn = document.getElementById("musicToggle");
+
+  btn.onclick = () => {
+    if (music.paused) {
+      music.play().catch(()=>{});
+      btn.textContent = "⏸ Pause Song";
+    } else {
+      music.pause();
+      btn.textContent = "🎵 Play Song (Arijit vibes)";
+    }
+  };
+};
+</script>
+
+</body>
+</html>
